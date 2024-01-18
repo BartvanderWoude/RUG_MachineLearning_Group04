@@ -6,20 +6,12 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 class CBISDDSM(Dataset):
-    """CBIS-DDSM dataset."""
-    def __init__(self, file="train.csv", path="", transform=None):
-        """
-        Arguments:
-            csv_file (string): Path to the csv file with annotations.
-            root_dir (string): Directory with all the images.
-            transform (callable, optional): Optional transform to be applied
-                on a sample.
-        """
+    def __init__(self, file="train.csv", path="", img_size=(224,224), transform=None):
         self.path = path
         self.data = pd.read_csv(path + file)
         if transform is None:
             self.transform = transforms.Compose([transforms.ToTensor(),
-                                        transforms.Resize((224,224), antialias = True),
+                                        transforms.Resize(img_size, antialias = True),
                                         transforms.Normalize((0.5,),
                                                             (0.5,))
                                         ])
