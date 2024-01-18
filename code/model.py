@@ -1,4 +1,3 @@
-import torchvision
 import torch
 
 class Net(torch.nn.Module):
