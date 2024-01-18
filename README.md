@@ -7,3 +7,5 @@ train.csv
 CBIS-DDSM/
 
 Where CBIS-DDSM contains a csv/ and jpeg/ folder.
+
+Create your own branch for development. To this branch you can push freely. When merging with main create a pull request from your own branch.
