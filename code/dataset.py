@@ -47,8 +47,7 @@ def test_dataset(path):
         print(sample['image'].shape, sample['class'].shape)
         x = x + 1
         if x == 5:
-            break
-        
+            break 
 
 if __name__ == '__main__':
     path = "../"
