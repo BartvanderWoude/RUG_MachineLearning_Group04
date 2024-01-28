@@ -1,15 +1,12 @@
 import torch
-import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import GridSearchCV
 from dataset import CBISDDSM
 from sklearn.metrics import confusion_matrix
 import numpy as np
 
-
+# Function to get the features and lables from the loader in order to process them later
 def get_features(loader):
     features, labels = [], []
     for sample in loader:
@@ -19,6 +16,7 @@ def get_features(loader):
     labels = torch.cat(labels, dim=0).numpy()
     return features,labels
 
+# Main kNN classifier function
 def knn_classifier(train_loader, test_loader, k):
     print(f'Running KNN for k={k}...')
     # Extract features and labels from the training set
@@ -47,7 +45,7 @@ def knn_classifier(train_loader, test_loader, k):
     fp_rate = fp / (fp + tn) if (fp + tn) > 0 else 0.0
     print(f'False Positives Rate: {fp_rate * 100:.2f}%')
 
-
+# Function to implement manual n-fold cross validation
 def manual_n_fold_cross_validation(data, n_folds):
     total_samples = len(data)
     shuffled_array = create_shuffled_array(total_samples-1)
@@ -62,12 +60,13 @@ def manual_n_fold_cross_validation(data, n_folds):
 
     return folds
 
+# Create a shuffled array of size N
 def create_shuffled_array(size):
     original_array = np.arange(1, size + 1)  # Creates an array from 1 to size
     shuffled_array = np.random.permutation(original_array)
     return shuffled_array
 
-
+# Compose train and test sets from the folds
 def get_train_test_sets(folds, fold_index):
     # Combine all folds except the test fold to create training data
     train_data = [data for i, fold in enumerate(folds) if i != fold_index for data in fold]
@@ -85,6 +84,7 @@ if __name__ == '__main__':
     data = CBISDDSM(file="train2.csv", path=path)
     folds = manual_n_fold_cross_validation(data, n_folds)
 
+    # N-folds cross validation
     for i in range(n_folds):
         train_data, test_data = get_train_test_sets(folds, i)
         # Create data loaders
