@@ -10,4 +10,4 @@ CBIS-DDSM/
 
 Where CBIS-DDSM contains a csv/ and jpeg/ folder.
 
-Create your own branch for development to which you can push freely. When merging with main create a pull request from your own branch.
+Create your own branch for development to which you can push freely. When merging with main create a pull request from your own branch. 
