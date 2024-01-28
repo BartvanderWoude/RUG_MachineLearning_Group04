@@ -40,6 +40,7 @@ class CBISDDSM(Dataset):
         target = torch.nn.functional.one_hot(target, num_classes=2).to(torch.float32)
         sample = {
             'image': self.preprocessPipeline.preprocess(image),
+            'augmentation': self.preprocessPipeline.augmentate(image, 4),
             'class': target
         }
 
