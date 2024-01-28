@@ -10,13 +10,13 @@ from sklearn.metrics import confusion_matrix
 
 
 def get_features(loader):
-    train_features, train_labels = [], []
+    features, labels = [], []
     for sample in loader:
-        train_features.append(sample['image'].view(sample['image'].size(0), -1))
-        train_labels.append(sample['class'].argmax(dim=1))
-    train_features = torch.cat(train_features, dim=0).numpy()
-    train_labels = torch.cat(train_labels, dim=0).numpy()
-    return train_features,train_labels
+        features.append(sample['image'].view(sample['image'].size(0), -1))
+        labels.append(sample['class'].argmax(dim=1))
+    features = torch.cat(features, dim=0).numpy()
+    labels = torch.cat(labels, dim=0).numpy()
+    return features,labels
 
 def knn_classifier(train_loader, test_loader, k):
     # Extract features and labels from the training set
@@ -45,6 +45,7 @@ def knn_classifier(train_loader, test_loader, k):
     fp_rate = fp / (fp + tn) if (fp + tn) > 0 else 0.0
     print(f'False Positives Rate: {fp_rate * 100:.2f}%')
 
+
 if __name__ == '__main__':
     path = "../"
     param_grid = {'n_neighbors': [3, 5, 7, 9, 11, 13]}
@@ -54,7 +55,6 @@ if __name__ == '__main__':
     data = CBISDDSM(file="train2.csv", path=path)
     # 80% training, 20% testing
     train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
-
     # Create data loaders
     train_loader = DataLoader(train_data, batch_size=16, shuffle=True, num_workers=4)
     test_loader = DataLoader(test_data, batch_size=16, shuffle=False, num_workers=4)
