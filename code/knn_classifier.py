@@ -28,7 +28,7 @@ def knn_classifier(train_loader, test_loader, k):
     # Extract features and labels from the test set
     test_features, test_labels = get_features(test_loader)
     # Initialize and train the KNN classifier
-    knn_classifier = KNeighborsClassifier(n_neighbors=k)
+    knn_classifier = KNeighborsClassifier(n_neighbors=k, metric='cosine')
     knn_classifier.fit(train_features, train_labels)
     # Predict on the test set
     predictions = knn_classifier.predict(test_features)
@@ -87,7 +87,7 @@ def get_train_test_sets(folds, fold_index):
 
 if __name__ == '__main__':
     path = "../"
-    n_neighbors = [2, 3, 5, 7, 9, 11, 13, 17, 20, 23]
+    n_neighbors = [3, 5, 7, 9, 11, 13, 15, 17,19, 21]
 
     n_folds = 10
     # Split the dataset into train and test sets
