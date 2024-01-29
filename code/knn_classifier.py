@@ -5,6 +5,10 @@ from sklearn.metrics import accuracy_score
 from dataset import CBISDDSM
 from sklearn.metrics import confusion_matrix
 import numpy as np
+from sklearn.metrics import f1_score
+import matplotlib.pyplot as plt
+
+
 
 # Function to get the features and lables from the loader in order to process them later
 def get_features(loader):
@@ -45,6 +49,12 @@ def knn_classifier(train_loader, test_loader, k):
     fp_rate = fp / (fp + tn) if (fp + tn) > 0 else 0.0
     print(f'False Positives Rate: {fp_rate * 100:.2f}%')
 
+    # Calculate F1 score
+    f1 = f1_score(test_labels, predictions)
+    print(f'F1 Score: {f1 * 100:.2f}%')
+
+    return f1, fn_rate
+
 # Function to implement manual n-fold cross validation
 def manual_n_fold_cross_validation(data, n_folds):
     total_samples = len(data)
@@ -77,13 +87,15 @@ def get_train_test_sets(folds, fold_index):
 
 if __name__ == '__main__':
     path = "../"
-    n_neighbors = [3, 5, 7, 9, 11]
+    n_neighbors = [2, 3, 5, 7, 9, 11, 13, 17, 20, 23]
 
-    n_folds = 5
+    n_folds = 10
     # Split the dataset into train and test sets
     data = CBISDDSM(file="train2.csv", path=path)
     folds = manual_n_fold_cross_validation(data, n_folds)
 
+    f1_scores = []
+    fn_rates = []
     # N-folds cross validation
     for i in range(n_folds):
         train_data, test_data = get_train_test_sets(folds, i)
@@ -91,4 +103,25 @@ if __name__ == '__main__':
         train_loader = DataLoader(train_data, batch_size=16, shuffle=True, num_workers=4)
         test_loader = DataLoader(test_data, batch_size=16, shuffle=False, num_workers=4)
         # Run KNN classifier
-        knn_classifier(train_loader, test_loader, n_neighbors[i])
+        f1, fn_rate = knn_classifier(train_loader, test_loader, n_neighbors[i])
+
+        # Append results to lists
+        f1_scores.append(f1)
+        fn_rates.append(fn_rate)
+
+    plt.figure(figsize=(10, 5))
+    plt.subplot(1, 2, 1)
+    plt.plot(n_neighbors, f1_scores, marker='o')
+    plt.title('F1 Score vs. Number of Neighbors')
+    plt.xlabel('Number of Neighbors')
+    plt.ylabel('F1 Score')
+
+    # Plot False Negatives Rates
+    plt.subplot(1, 2, 2)
+    plt.plot(n_neighbors, fn_rates, marker='o', color='r')
+    plt.title('False Negatives Rate vs. Number of Neighbors')
+    plt.xlabel('Number of Neighbors')
+    plt.ylabel('False Negatives Rate')
+
+    plt.tight_layout()
+    plt.show()
