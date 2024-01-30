@@ -42,7 +42,7 @@ def knn_classifier(train_loader, test_loader, k):
     tn, fp, fn, tp = cm.ravel()
 
     # Calculate False Negatives (FN) rate
-    fn_rate = fn / (fn + tn) if (fn + tn) > 0 else 0.0
+    fn_rate = fn / (fn + tp) if (fn + tn) > 0 else 0.0
     print(f'False Negatives Rate: {fn_rate * 100:.2f}%')
 
     # Calculate False Positives (FP) rate
