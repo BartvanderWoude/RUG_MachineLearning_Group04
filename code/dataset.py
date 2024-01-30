@@ -4,6 +4,7 @@ from skimage import io
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
+from exploratory_analysis import DatasetVisualizer
 
 class CBISDDSM(Dataset):
     def __init__(self, file="train.csv", path="", img_size=(224,224), transform=None):
@@ -17,6 +18,7 @@ class CBISDDSM(Dataset):
                                         ])
         else:
             self.transform = transform
+        self.visualize_dataset(5)
 
     def __len__(self):
         return len(self.data)

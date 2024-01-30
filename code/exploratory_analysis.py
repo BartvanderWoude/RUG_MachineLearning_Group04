@@ -1,33 +1,46 @@
-import os
-import cv2
-import matplotlib.pyplot as plt
-import random
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.preprocessing import LabelEncoder
 
-class DatasetVisualizer:
-    def __init__(self, dataset_path):
-        self.dataset_path = dataset_path
-        self.image_files = [f for f in os.listdir(dataset_path) if f.endswith(".jpg") or f.endswith(".jpeg")]
+# Read the training CSV file into a DataFrame
+train_df = pd.read_csv('../CBIS-DDSM/csv/calc_case_description_train_set.csv')
 
-    def visualize_dataset(self, num_samples=5):
-        # Randomly choose samples
-        sample_files = random.sample(self.image_files, num_samples)
+# Encode categorical columns ('mass shape' and 'mass margins')
+label_encoder = LabelEncoder()
+train_df['calc type'] = label_encoder.fit_transform(train_df['calc type'])
+train_df['calc distribution'] = label_encoder.fit_transform(train_df['calc distribution'])
 
-        # Set up subplots
-        fig, axes = plt.subplots(1, num_samples, figsize=(15, 3))
+# Define features (X_train) and target variable (y_train)
+X_train = train_df[['calc type', 'calc distribution','subtlety']]
+y_train = (train_df['assessment'] > 3).astype(int)  # 1 if assessment > 3, 0 otherwise
 
-        # Display sample images
-        for i, image_file in enumerate(sample_files):
-            image_path = os.path.join(self.dataset_path, image_file)
-            image = cv2.imread(image_path)
+# Read the testing CSV file into a DataFrame
+test_df = pd.read_csv('../CBIS-DDSM/csv/calc_case_description_test_set.csv')
 
-            # Convert BGR to RGB for displaying with Matplotlib
-            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+# Encode categorical columns in the testing data
+test_df['calc type'] = label_encoder.fit_transform(test_df['calc type'])
+test_df['calc distribution'] = label_encoder.fit_transform(test_df['calc distribution'])
+# test_df['subtlety'] = label_encoder.fit_transform(test_df['subtlety'])
 
-            # Display the image
-            axes[i].imshow(image_rgb)
-            axes[i].set_title(image_file)
-            axes[i].axis("off")
+# Define features (X_test) and target variable (y_test)
+X_test = test_df[['calc type', 'calc distribution','subtlety']]
+y_test = (test_df['assessment'] > 3).astype(int)  # 1 if assessment > 3, 0 otherwise
 
-        plt.show()
+# Build a logistic regression model
+model = LogisticRegression()
+model.fit(X_train, y_train)
 
+# Make predictions on the test set
+y_pred = model.predict(X_test)
 
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+classification_report_str = classification_report(y_test, y_pred)
+
+# Print the results
+print(f'Accuracy: {accuracy:.2f}')
+print(f'Confusion Matrix:\n{conf_matrix}')
+print(f'Classification Report:\n{classification_report_str}')
