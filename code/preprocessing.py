@@ -36,6 +36,6 @@ class PreprocessPipeline:
         for _ in range(number_of_augmentations):
             augmentations.append(self._augmentate(image))
 
-        print(len(augmentations))
+        # print(len(augmentations))
 
         return augmentations

@@ -34,4 +34,4 @@ def training_loop(n_epochs, optimizer, model, loss_fn, train_loader, validation_
             loss_val += loss.item()
         
         print('{} Epoch {}, Validation loss {}, Accuracy {}'.format(
-            datetime.datetime.now(), epoch, loss_val / len(validation_loader), correct / (len(validation_loader) * 4)))
+            datetime.datetime.now(), epoch, loss_val / len(validation_loader), correct))
