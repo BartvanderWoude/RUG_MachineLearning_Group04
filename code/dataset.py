@@ -11,6 +11,7 @@ class CBISDDSM(Dataset):
         self.data = pd.read_csv(path + file)
         if transform is None:
             self.transform = transforms.Compose([transforms.ToTensor(),
+                                        transforms.CenterCrop((2000,2000)),
                                         transforms.Resize(img_size, antialias = True),
                                         transforms.Normalize((0.5,),
                                                             (0.5,))
@@ -34,7 +35,7 @@ class CBISDDSM(Dataset):
 
         target = self.data.iloc[idx, 1]
         target = torch.from_numpy(np.array(target, dtype=int))
-        target = torch.nn.functional.one_hot(target, num_classes=2).to(torch.float32)
+        # target = torch.nn.functional.one_hot(target, num_classes=2).to(torch.float32)
         sample = {'image': image, 'class': target}
 
         return sample

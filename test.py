@@ -12,18 +12,25 @@ def test():
     print("Device: ", device)
 
     data = dataset.CBISDDSM()
-    data_loader = DataLoader(data, batch_size=16, shuffle=True, num_workers=4)
+    train_size = int(0.8 * len(data))
+    validation_size = len(data) - train_size
+    train_dataset, validation_dataset = torch.utils.data.random_split(data, [train_size, validation_size])
+
+    data_loader_train = DataLoader(train_dataset, batch_size=4, shuffle=True, num_workers=4)
+    data_loader_validation = DataLoader(validation_dataset, batch_size=4, shuffle=True, num_workers=4)
+
 
     net = model.Net().to(device)
-    optimizer = torch.optim.Adam(net.parameters(), lr=1e-1)
-    loss_fn = torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(net.parameters(), lr=1e-2, weight_decay=1e-5)
+    loss_fn = torch.nn.BCELoss()
 
     train.training_loop(
-        n_epochs = 100,
+        n_epochs = 20,
         optimizer = optimizer,
         model = net,
         loss_fn = loss_fn,
-        train_loader = data_loader,
+        train_loader = data_loader_train,
+        validation_loader = data_loader_validation,
         device=device
     )
 
