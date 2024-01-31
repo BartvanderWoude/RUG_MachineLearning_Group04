@@ -1,15 +1,18 @@
+from .preprocessing import PreprocessPipeline
+from exploratory_analysis import DatasetVisualizer
+
 import torch
 import pandas as pd
 from skimage import io
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
-from .preprocessing import PreprocessPipeline
 
 class CBISDDSM(Dataset):
     def __init__(self, file="train.csv", path="", img_size=(224,224), transform=None):
         self.path = path
         self.data = pd.read_csv(path + file)
+
         self.preprocessPipeline = PreprocessPipeline()
         # if transform is None:
         #     self.transform = transforms.Compose([transforms.ToTensor(),
@@ -20,6 +23,7 @@ class CBISDDSM(Dataset):
         #     # self.transform = build_preprocessing_pipeline()
         # else:
         #     self.transform = transform
+        # self.visualize_dataset(5)
 
     def __len__(self):
         return len(self.data)
