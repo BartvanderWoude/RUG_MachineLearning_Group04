@@ -4,19 +4,22 @@ from skimage import io
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
+from .preprocessing import PreprocessPipeline
 
 class CBISDDSM(Dataset):
     def __init__(self, file="train.csv", path="", img_size=(224,224), transform=None):
         self.path = path
         self.data = pd.read_csv(path + file)
-        if transform is None:
-            self.transform = transforms.Compose([transforms.ToTensor(),
-                                        transforms.Resize(img_size, antialias = True),
-                                        transforms.Normalize((0.5,),
-                                                            (0.5,))
-                                        ])
-        else:
-            self.transform = transform
+        self.preprocessPipeline = PreprocessPipeline()
+        # if transform is None:
+        #     self.transform = transforms.Compose([transforms.ToTensor(),
+        #                                 transforms.Resize(img_size, antialias = True),
+        #                                 transforms.Normalize((0.5,),
+        #                                                     (0.5,))
+        #                                 ])
+        #     # self.transform = build_preprocessing_pipeline()
+        # else:
+        #     self.transform = transform
 
     def __len__(self):
         return len(self.data)
@@ -28,14 +31,18 @@ class CBISDDSM(Dataset):
         img_name = self.data.iloc[idx,0]
         image = io.imread(self.path + img_name)
 
-        if self.transform:
-            image = self.transform(image)
+        # if self.transform:
+        #     image = self.transform(image)
             # image = image.view(image.shape[-2],image.shape[-1])
 
         target = self.data.iloc[idx, 1]
         target = torch.from_numpy(np.array(target, dtype=int))
         target = torch.nn.functional.one_hot(target, num_classes=2).to(torch.float32)
-        sample = {'image': image, 'class': target}
+        sample = {
+            'image': self.preprocessPipeline.preprocess(image),
+            'augmentation': self.preprocessPipeline.augmentate(image, 4),
+            'class': target
+        }
 
         return sample
 
