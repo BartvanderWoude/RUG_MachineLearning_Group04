@@ -7,6 +7,7 @@ code/
 test.py
 CBIS-DDSM/
 CBIS-DDSM/train.csv
+CBIS-DDSM/train-augmented.csv
 ```
 
 Where CBIS-DDSM contains a csv/ and jpeg/ folder. After unzipping the dataset folder, run:
