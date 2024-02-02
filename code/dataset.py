@@ -9,7 +9,7 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 class CBISDDSM(Dataset):
-    def __init__(self, file="CBIS-DDSM/train.csv", path="", img_size=(224,224), enable_preprocessing=True):
+    def __init__(self, file="CBIS-DDSM/train.csv", path="", enable_preprocessing=True):
         self.path = path
         self.data = pd.read_csv(path + file)
         self.enable_preprocessing = enable_preprocessing

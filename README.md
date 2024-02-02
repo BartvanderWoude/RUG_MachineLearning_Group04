@@ -25,12 +25,12 @@ Note: steps are required to be done in order!
 ## Usage
 In order to train the model, run:
 ```
-python train.py
+python train_model.py
 ```
 
 In order to test the model, run:
 ```
-python test.py
+python test_model.py
 ```
 
 ## Workflow
