@@ -23,8 +23,8 @@ class CBISDDSM(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        img_name = self.data.iloc[idx,0]
-        image = io.imread(self.path + img_name)
+        img_path = self.path + self.data.iloc[idx,0]
+        image = io.imread(img_path)
 
         target = self.data.iloc[idx, 1]
         target = torch.from_numpy(np.array(target, dtype=int))
@@ -33,13 +33,14 @@ class CBISDDSM(Dataset):
         if self.enable_preprocessing:
             sample = {
                 'image': self.transform.preprocess(image),
-                'augmentation': self.transform.augmentate(image, 4),
+                # 'augmentation': self.transform.augmentate(image, 4),
                 'class': target
             }
         else:
             sample = {
                 'image': self.transform.resize(image),
-                'image_name': img_name
+                'image_path': img_path,
+                'class': target
             }
 
         return sample

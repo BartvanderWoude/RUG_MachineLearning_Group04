@@ -56,11 +56,11 @@ class TransformPipeline:
         return self._resize_pipeline(image)
     
     def to_tensor(self, image):
-        """Converts a tensor to PIL image"""
+        """Converts a PIL image to a tensor"""
         return self._to_tensor_pipeline(image)
     
     def to_image(self, tensor):
-        """Converts a PIL image to a tensor"""
+        """Converts a tensor to a PIL image"""
         return self._to_image_pipeline(tensor)
 
     def preprocess(self, image):

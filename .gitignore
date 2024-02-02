@@ -1,2 +1,2 @@
 CBIS-DDSM/
-__pycache__/
+*/__pycache__/*
