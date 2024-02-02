@@ -35,4 +35,4 @@ final = data.frame(c(benign_img, malignant_img))
 final[,2] = c(rep(0,length(benign_img)), rep(1,length(malignant_img)))
 names(final) = c("image_path", "class")
 
-write.csv(final, "../../train.csv", row.names = FALSE)
+write.csv(final, "../train.csv", row.names = FALSE)

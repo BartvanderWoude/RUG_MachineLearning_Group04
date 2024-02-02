@@ -9,7 +9,7 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 class CBISDDSM(Dataset):
-    def __init__(self, file="train.csv", path="", img_size=(224,224), enable_preprocessing=True):
+    def __init__(self, file="CBIS-DDSM/train.csv", path="", img_size=(224,224), enable_preprocessing=True):
         self.path = path
         self.data = pd.read_csv(path + file)
         self.enable_preprocessing = enable_preprocessing
@@ -46,7 +46,7 @@ class CBISDDSM(Dataset):
         return sample
 
 def test_dataset(path):
-    data = CBISDDSM(file="train.csv", path=path)
+    data = CBISDDSM(file="CBIS-DDSM/train.csv", path=path)
     data_loader = DataLoader(data, batch_size=4, shuffle=True, num_workers=4)
     x = 0
     for sample in data_loader:

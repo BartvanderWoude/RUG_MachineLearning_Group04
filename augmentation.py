@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 import code.dataset as dataset
 from code.transform import TransformPipeline
 
-def augmentate(file="train.csv"):
+def augmentate(file="CBIS-DDSM/train.csv"):
     # Create file's dataset and dataloader; used to cycle through all images in file's dataset
     data = dataset.CBISDDSM(file=file, enable_preprocessing=False)
     data_loader = DataLoader(data, batch_size=1, shuffle=False, num_workers=4)
