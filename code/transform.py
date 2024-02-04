@@ -1,6 +1,6 @@
 from torchvision import transforms
 
-class Logger:
+class TransformPipeline:
     """Configurable pipeline with preprocessing and augmentation options"""
     def __init__(self):
         ##############################################

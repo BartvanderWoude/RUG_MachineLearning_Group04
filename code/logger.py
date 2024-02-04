@@ -1,6 +1,10 @@
-class TransformPipeline:
+import os
+
+class Logger:
     """Logger pipeline for managing losses and metrics during training and validation."""
     def __init__(self):
+        if not os.path.exists("output/logs"):
+            os.makedirs("output/logs")
         self.training = open("output/logs/training_loss.csv", "w")
         self.training.write("epoch,loss\n")
 
