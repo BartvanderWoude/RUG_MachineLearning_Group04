@@ -28,7 +28,9 @@ class CBISDDSM(Dataset):
 
         target = self.data.iloc[idx, 1]
         target = torch.from_numpy(np.array(target, dtype=int))
-        # target = torch.nn.functional.one_hot(target, num_classes=2).to(torch.float32)
+        # if self.enable_preprocessing:
+        #     target = torch.nn.functional.one_hot(target, num_classes=2).to(torch.float32)
+        # print(target)
 
         if self.enable_preprocessing:
             sample = {

@@ -1,5 +1,6 @@
 import torch
 import torchvision
+import os
 
 from torch.utils.data import DataLoader
 
@@ -21,12 +22,12 @@ def train_model():
     data_loader_validation = DataLoader(validation_dataset, batch_size=4, shuffle=True, num_workers=4)
 
     net = model.Net().to(device)
-    optimizer = torch.optim.Adam(net.parameters(), lr=1e-2, weight_decay=1e-5)
-    loss_fn = torch.nn.BCELoss()
+    optimizer = torch.optim.Adam(net.parameters(), lr=1e-5, weight_decay=1e-5)
+    loss_fn = torch.nn.CrossEntropyLoss()
     log = logger.Logger()
 
-    train.training_loop(
-        n_epochs = 20,
+    net = train.training_loop(
+        n_epochs = 3,
         optimizer = optimizer,
         model = net,
         loss_fn = loss_fn,
@@ -35,6 +36,10 @@ def train_model():
         validation_loader = data_loader_validation,
         device=device
     )
+
+    if not os.path.exists("output/models"):
+        os.makedirs("output/models")
+    torch.save(net.state_dict(), "output/models/model.pth")
 
 if __name__ == '__main__':
     train_model()
