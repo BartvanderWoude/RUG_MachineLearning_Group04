@@ -14,5 +14,5 @@ class Logger:
     def log_training_loss(self, epoch, loss):
         self.training.write(str(epoch) + "," + str(loss) + "\n")
 
-    def log_validation_loss(self, epoch, loss, accuracy):
-        self.validation.write(str(epoch) + "," + str(loss) + ",", str(accuracy), "\n")
+    def log_validation_loss(self, epoch, loss, accuracy, f1score, fnr):
+        self.validation.write(str(epoch) + "," + str(loss) + "," + str(accuracy) + "," + str(f1score) + "," + str(fnr) + "\n")

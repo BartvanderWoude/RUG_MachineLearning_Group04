@@ -61,11 +61,16 @@ df = df[-1,]
 
 idxs = 1:nrow(df)
 idxs = sample(idxs)
+test_idxs = idxs[ceiling(length(idxs)*0.8):length(idxs)]
 train_idxs = idxs[1:floor(length(idxs)*0.8)]
-test_idxs = idxs[floor(length(idxs)*0.8):length(idxs)]
+val_idxs = idxs[1:floor(length(train_idxs)*0.2)]
+train_idxs = idxs[ceiling(length(train_idxs)*0.2):length(train_idxs)]
+
 
 train_df = df[train_idxs,]
+val_df = df[val_idxs,]
 test_df = df[test_idxs,]
 
 write.csv(train_df, "../train.csv", row.names = FALSE)
+write.csv(val_df, "../val.csv", row.names = FALSE)
 write.csv(test_df, "../test.csv", row.names = FALSE)
