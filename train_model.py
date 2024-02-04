@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 import code.dataset as dataset
 import code.model as model
 import code.train as train
+import code.logger as logger
 
 def train_model():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -22,12 +23,14 @@ def train_model():
     net = model.Net().to(device)
     optimizer = torch.optim.Adam(net.parameters(), lr=1e-2, weight_decay=1e-5)
     loss_fn = torch.nn.BCELoss()
+    log = logger.Logger()
 
     train.training_loop(
         n_epochs = 20,
         optimizer = optimizer,
         model = net,
         loss_fn = loss_fn,
+        log = log,
         train_loader = data_loader_train,
         validation_loader = data_loader_validation,
         device=device
