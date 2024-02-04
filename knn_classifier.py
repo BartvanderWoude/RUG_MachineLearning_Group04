@@ -55,9 +55,10 @@ def knn_classifier(train_loader, test_loader, k):
 
     return f1, fn_rate
 
-# Function to implement manual n-fold cross validation
+#Function to implement manual n-fold cross validation
 def manual_n_fold_cross_validation(data, n_folds):
-    total_samples = len(data)
+    # Divide per total images
+    total_samples = len(data)/5
     shuffled_array = create_shuffled_array(total_samples-1)
 
     folds = [[] for _ in range(n_folds)]  # Initialize empty lists for each fold
@@ -65,9 +66,11 @@ def manual_n_fold_cross_validation(data, n_folds):
     for i, item in enumerate(shuffled_array):
         if count >= n_folds:
             count = 0
-        folds[count].append(data[item])
+        # Have all version of an image in the same fold
+        total_values = int(item*5 + 1)
+        for i in range(0,5):
+            folds[count].append(data[total_values-i])
         count += 1
-
     return folds
 
 # Create a shuffled array of size N
