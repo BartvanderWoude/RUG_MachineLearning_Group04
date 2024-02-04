@@ -10,12 +10,12 @@ CBIS-DDSM/train.csv
 CBIS-DDSM/train-augmented.csv
 ```
 
-Where CBIS-DDSM contains a csv/ and jpeg/ folder. After unzipping the dataset folder, run:
+Where CBIS-DDSM contains a csv/ and jpeg/ folder. After unzipping the dataset folder, move to the analysis/ folder and run:
 ```
-Rscript analysis/get_traincsv.R
+Rscript get_traincsv.R
 ```
 
-To get the augmented dataset, run:
+To get the augmented dataset, move back to the main folder and run:
 ```
 python augmentation.py
 ```
