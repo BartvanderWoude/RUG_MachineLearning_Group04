@@ -4,6 +4,7 @@ from tqdm import tqdm
 
 def training_loop(n_epochs, optimizer, model, loss_fn, log, train_loader, validation_loader, device):
     ## Training loop
+    previous_val_loss = float('inf')
     for epoch in range(1, n_epochs + 1):
         # Training
         model.train()
@@ -45,7 +46,14 @@ def training_loop(n_epochs, optimizer, model, loss_fn, log, train_loader, valida
                 
                 loss_val += loss.item()
         
-        log.log_validation_loss(epoch, loss_val / len(validation_loader))
+        log.log_validation_loss(epoch, loss_val / len(validation_loader), correct / total)
         print('{} Epoch {}, Validation loss {}, Accuracy {}'.format(
             datetime.datetime.now(), epoch, loss_val / len(validation_loader), correct / total))
+        
+        # Early stopping
+        if (loss_val / len(validation_loader)) < previous_val_loss:
+            previous_val_loss = loss_val / len(validation_loader)
+        else:
+            print("Early stopping")
+            break
     return model
