@@ -15,11 +15,21 @@ def test_model():
 
     data = dataset.CBISDDSM(file="CBIS-DDSM/test.csv")
 
-    data_loader = DataLoader(data, batch_size=8, shuffle=True, num_workers=4)
+    # Note: for tp, tn, fp, fn calculation, batch_size must be 1
+    data_loader = DataLoader(data, batch_size=1, shuffle=True, num_workers=4)
 
     net = model.Net().to(device)
-    net.load_state_dict(torch.load("output/models/model.pth"))
     loss_fn = torch.nn.CrossEntropyLoss()
+
+    files = os.listdir("output/models/")
+    files = [x.split(".")[0] for x in files]
+    files = [x.split("-")[1] for x in files if len(x.split("-")) > 1]
+    highest = 0
+    for x in range(50):
+        if str(x) in files:
+            highest = x
+    print("output/models/model-" + str(highest) + ".pth")
+    net.load_state_dict(torch.load("output/models/model-" + str(highest) + ".pth"))
 
     test.testing_loop(
         model = net,

@@ -14,20 +14,21 @@ def train_model():
     print("Device: ", device)
 
     data = dataset.CBISDDSM(file="CBIS-DDSM/train-augmented.csv")
-    train_size = int(0.8 * len(data))
-    validation_size = len(data) - train_size
-    train_dataset, validation_dataset = torch.utils.data.random_split(data, [train_size, validation_size])
+    valdata = dataset.CBISDDSM(file="CBIS-DDSM/val.csv")
+    # train_size = int(0.8 * len(data))
+    # validation_size = len(data) - train_size
+    # train_dataset, validation_dataset = torch.utils.data.random_split(data, [train_size, validation_size])
 
-    data_loader_train = DataLoader(train_dataset, batch_size=4, shuffle=True, num_workers=4)
-    data_loader_validation = DataLoader(validation_dataset, batch_size=4, shuffle=True, num_workers=4)
+    data_loader_train = DataLoader(data, batch_size=4, shuffle=True, num_workers=4)
+    data_loader_validation = DataLoader(valdata, batch_size=1, shuffle=True, num_workers=4)
 
     net = model.Net().to(device)
-    optimizer = torch.optim.Adam(net.parameters(), lr=1e-5, weight_decay=1e-5)
+    optimizer = torch.optim.Adam(net.parameters(), lr=1e-4, weight_decay=1e-5)
     loss_fn = torch.nn.CrossEntropyLoss()
     log = logger.Logger()
 
-    net = train.training_loop(
-        n_epochs = 3,
+    train.training_loop(
+        n_epochs = 50,
         optimizer = optimizer,
         model = net,
         loss_fn = loss_fn,
@@ -36,10 +37,6 @@ def train_model():
         validation_loader = data_loader_validation,
         device=device
     )
-
-    if not os.path.exists("output/models"):
-        os.makedirs("output/models")
-    torch.save(net.state_dict(), "output/models/model.pth")
 
 if __name__ == '__main__':
     train_model()
