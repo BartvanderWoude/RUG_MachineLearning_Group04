@@ -9,7 +9,7 @@ CBIS-DDSM/
 CBIS-DDSM/train.csv
 CBIS-DDSM/train-augmented.csv
 ```
-
+ 
 Where CBIS-DDSM contains a csv/ and jpeg/ folder. After unzipping the dataset folder, move to the analysis/ folder and run:
 ```
 Rscript get_traincsv.R
