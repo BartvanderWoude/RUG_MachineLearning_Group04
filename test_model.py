@@ -15,7 +15,8 @@ def test_model():
 
     data = dataset.CBISDDSM(file="CBIS-DDSM/test.csv")
 
-    data_loader = DataLoader(data, batch_size=8, shuffle=True, num_workers=4)
+    # Note: for tp, tn, fp, fn calculation, batch_size must be 1
+    data_loader = DataLoader(data, batch_size=1, shuffle=True, num_workers=4)
 
     net = model.Net().to(device)
     net.load_state_dict(torch.load("output/models/model.pth"))
