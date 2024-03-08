@@ -4,7 +4,9 @@ Download the Kaggle dataset from https://www.kaggle.com/datasets/awsaf49/cbis-dd
 ```
 analysis/
 code/
-test.py
+augmentation.py
+test_model.py
+train_model.py
 CBIS-DDSM/
 CBIS-DDSM/train.csv
 CBIS-DDSM/train-augmented.csv
